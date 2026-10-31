@@ -12,6 +12,7 @@ jobs:
   build:
     name: Release APK
     runs-on: ubuntu-latest
+    timeout-minutes: 45
 
     steps:
       - name: Kodu al
@@ -52,8 +53,13 @@ jobs:
       - name: gradlew çalıştırılabilir yap
         run: chmod +x ./gradlew
 
+      - name: Gradle calisiyor mu
+        timeout-minutes: 8
+        run: ./gradlew --version --console=plain
+
       - name: APK derle
-        run: ./gradlew clean assembleRelease --no-daemon --stacktrace
+        timeout-minutes: 30
+        run: ./gradlew assembleRelease --console=plain --stacktrace
 
       - name: APK'yı adlandır
         run: |
