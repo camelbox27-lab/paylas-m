@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Virtually every Xtream Codes panel is served over plain HTTP.
+  Android 9 (API 28) blocks that by default, which is the single most common
+  reason third-party IPTV apps show "cannot load channels".
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

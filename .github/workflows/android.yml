@@ -1,0 +1,71 @@
+name: APK derle
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Kodu al
+        uses: actions/checkout@v4
+
+      - name: JDK 17 kur
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Android SDK kur
+        uses: android-actions/setup-android@v3
+
+      - name: Gerekli SDK paketleri
+        run: sdkmanager --install "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+
+      - name: Gradle önbelleği
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle.kts', 'gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - name: gradlew çalıştırılabilir yap
+        run: chmod +x ./gradlew
+
+      - name: APK derle
+        run: ./gradlew clean assembleRelease --no-daemon --stacktrace
+
+      - name: APK'yı adlandır
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/release/app-release.apk dist/PaylasM-IPTV.apk
+          ls -lh dist/
+
+      - name: APK'yı yükle
+        uses: actions/upload-artifact@v4
+        with:
+          name: PaylasM-IPTV-APK
+          path: dist/PaylasM-IPTV.apk
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Doğrudan indirilebilir sürüm yayınla
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete apk-latest --yes --cleanup-tag 2>/dev/null || true
+          gh release create apk-latest dist/PaylasM-IPTV.apk \
+            --title "Paylas-M IPTV — son sürüm" \
+            --notes "Telefonunla bu sayfayı açıp PaylasM-IPTV.apk dosyasına dokunarak kurabilirsin. Derleme: ${{ github.sha }}" \
+            --prerelease \
+            --target "${{ github.sha }}"
