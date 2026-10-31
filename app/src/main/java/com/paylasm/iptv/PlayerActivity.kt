@@ -229,9 +229,9 @@ private fun PlayerScreen(
             modifier = Modifier.fillMaxSize(),
             factory = { ctx ->
                 PlayerView(ctx).apply {
-                    player = exo
-                    useController = true
-                    controllerShowTimeoutMs = 3_500
+                    setPlayer(exo)
+                    setUseController(true)
+                    setControllerShowTimeoutMs(3_500)
                     resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
                     setShowBuffering(PlayerView.SHOW_BUFFERING_NEVER)
                     setKeepContentOnPlayerReset(true)

@@ -71,9 +71,11 @@ fun LoginScreen(onLoggedIn: () -> Unit) {
         server = value
         error = null
         val parsed = Creds.parse(value)
-        if (parsed?.user != null && parsed.pass != null) {
-            username = parsed.user
-            password = parsed.pass
+        val parsedUser = parsed?.user
+        val parsedPass = parsed?.pass
+        if (parsed != null && parsedUser != null && parsedPass != null) {
+            username = parsedUser
+            password = parsedPass
             server = parsed.base
             autofilled = true
         }
