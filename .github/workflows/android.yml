@@ -23,11 +23,22 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Android SDK kur
-        uses: android-actions/setup-android@v3
-
-      - name: Gerekli SDK paketleri
-        run: sdkmanager --install "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+      # android-actions/setup-android@v3 hala kaldirilmis olan 'tools' paketini
+      # kurmaya calisiyor ve basarisiz oluyor. Runner imajinda Android SDK zaten
+      # kurulu, dogrudan onu kullaniyoruz.
+      - name: Android SDK hazirla
+        run: |
+          set -euo pipefail
+          echo "ANDROID_HOME=${ANDROID_HOME:-<bos>}"
+          SDKMANAGER="$(ls "${ANDROID_HOME}"/cmdline-tools/*/bin/sdkmanager 2>/dev/null | tail -1)"
+          if [ -z "$SDKMANAGER" ]; then
+            echo "sdkmanager bulunamadi" >&2
+            exit 1
+          fi
+          echo "sdkmanager: $SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses > /dev/null 2>&1 || true
+          "$SDKMANAGER" "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+          echo "sdk.dir=${ANDROID_HOME}" > local.properties
 
       - name: Gradle önbelleği
         uses: actions/cache@v4
