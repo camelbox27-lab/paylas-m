@@ -12,10 +12,16 @@ Canlı TV, filmler ve diziler. Türkçe arayüz.
 
 Kod her push'ta GitHub üzerinde otomatik derleniyor. Android Studio kurmana gerek yok.
 
-**En kolay yol — telefondan:**
-1. Bu deponun **Releases** sayfasını aç: `apk-latest` sürümü.
-2. `PaylasM-IPTV.apk` dosyasına dokun, indir.
-3. Android "bilinmeyen kaynak" uyarısı verirse, o uygulamaya izin verip kuruluma devam et.
+**En kolay yol — telefondan bu linke dokun:**
+
+**https://github.com/camelbox27-lab/paylas-m/releases/download/apk-latest/PaylasM-IPTV.apk**
+
+1. Link indirmeyi başlatır (~14 MB).
+2. İnen dosyaya dokun.
+3. Android "bilinmeyen kaynak" uyarısı verirse, indirmeyi yapan uygulamaya
+   (Chrome, Dosyalar vb.) izin ver ve kuruluma devam et.
+
+Sürüm sayfası: https://github.com/camelbox27-lab/paylas-m/releases/tag/apk-latest
 
 **Alternatif — Actions sekmesinden:**
 1. **Actions** → en son **APK derle** çalışmasını aç.
